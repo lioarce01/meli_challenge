@@ -8,9 +8,11 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-app.listen(config.port, () => {
-  console.log(`Server is running on port ${config.port}`);
-});
+if (process.env.NODE_ENV !== "test") {
+  app.listen(config.port, () => {
+    console.log(`Server is running on port ${config.port}`);
+  });
+}
 
 app.use("/", router);
 
