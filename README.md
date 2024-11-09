@@ -17,6 +17,15 @@ To install the necessary packages, run the following command in the project root
 pnpm install
 ```
 
+## Setup .env file
+
+To setup Database (mongodb preferably), create .env file and define the following variable:
+
+```
+DATABASE_URL=mongodb+srv://<DB_USER>:<DB_PASSWORD>@<PROVIDER>/<DATABASE>?retryWrites=true&w=majority"
+PORT=4000 (can be other port)
+```
+
 ## Generating Prisma Client
 
 To generate the prisma client and run the server correctly:
