@@ -1,3 +1,5 @@
+![CI](https://github.com/lioarce01/meli-challenge/actions/workflows/ci.yml/badge.svg)
+
 # Mutant DNA API
 
 This repository contains an API project for detecting mutant DNA sequences and providing statistics on DNA analyses.
@@ -69,14 +71,7 @@ This endpoint is used to check whether the given DNA sequence belongs to a mutan
 
 ```json
 {
-  "dna": [
-    "ATGCGA",
-    "CAGTGC",
-    "TTATGT",
-    "AGAAGG",
-    "CCCCTA",
-    "TCACTG"
-  ]
+  "dna": ["ATGCGA", "CAGTGC", "TTATGT", "AGAAGG", "CCCCTA", "TCACTG"]
 }
 ```
 
