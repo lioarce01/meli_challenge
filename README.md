@@ -1,4 +1,4 @@
-![CI](https://github.com/lioarce01/meli-challenge/actions/workflows/ci.yml/badge.svg)
+![CI](https://github.com/lioarce01/meli_challenge/actions/workflows/ci.yml/badge.svg)
 
 # Mutant DNA API
 
