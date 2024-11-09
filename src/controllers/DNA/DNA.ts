@@ -1,9 +1,13 @@
 import { Request, Response } from "express";
 import DNAService from "../../services/DNA/DNA";
 
-const dnaService = new DNAService();
-
 class DNAController {
+  private dnaService: DNAService;
+
+  constructor() {
+    this.dnaService = new DNAService();
+    this.checkMutant = this.checkMutant.bind(this);
+  }
   async checkMutant(req: Request, res: Response) {
     const { dna } = req.body;
 
@@ -17,7 +21,7 @@ class DNAController {
     }
 
     try {
-      const result = await dnaService.saveDNA(dna);
+      const result = await this.dnaService.saveDNA(dna);
 
       return res.status(result.status).json({
         isMutant: result.isMutant,

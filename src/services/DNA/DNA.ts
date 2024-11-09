@@ -5,7 +5,7 @@ import StatsService from "../Stats/Stats";
 const statsService = new StatsService();
 
 class DNAService {
-  async saveDNA(dna: string[]) {
+  async saveDNA(dna: string[]): Promise<any> {
     const mutantStatus = isMutantCheck(dna);
 
     try {
