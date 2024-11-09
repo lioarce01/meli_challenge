@@ -12,19 +12,16 @@ type DNAResponse = {
 };
 
 class DNAService {
-  // Utility function to normalize the DNA sequence
   private normalizeDNA(dna: string[]): string[] {
     return dna.map((s) => s.trim().toUpperCase());
   }
 
-  // Main function to save DNA and determine if it is mutant or human
   async saveDNA(dna: string[]): Promise<DNAResponse> {
     const mutantStatus = isMutantCheck(dna);
     const normalizedDNA = this.normalizeDNA(dna);
     const dnaString = JSON.stringify(normalizedDNA);
 
     try {
-      // Check if DNA already exists in the database
       const existingDNA = await prisma.dNA.findFirst({
         where: { dnaString },
       });
@@ -37,7 +34,6 @@ class DNAService {
         };
       }
 
-      // Save new DNA entry if it doesn't exist
       const savedDNA = await prisma.dNA.create({
         data: {
           dna: normalizedDNA,
@@ -46,7 +42,6 @@ class DNAService {
         },
       });
 
-      // Update stats based on the mutant status
       await statsService.updateStats(mutantStatus);
 
       return {
@@ -57,7 +52,6 @@ class DNAService {
     } catch (error: any) {
       console.error("Error saving DNA:", error);
 
-      // Handle unique constraint error (P2002) from Prisma
       if (error.code === "P2002") {
         return {
           status: 409,
@@ -67,7 +61,6 @@ class DNAService {
         };
       }
 
-      // Re-throw any unexpected errors
       throw new Error(`Failed to save DNA: ${error.message}`);
     }
   }

@@ -162,7 +162,6 @@ describe("DNAService", () => {
       message: "Unique constraint failed on the dnaString field",
     });
 
-    // Call saveDNA
     const result = await dnaService.saveDNA(mockDna);
 
     expect(result).toEqual({

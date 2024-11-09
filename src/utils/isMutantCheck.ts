@@ -1,7 +1,3 @@
-interface DNA {
-  dna: string[];
-}
-
 function isMutant(dna: string[]): boolean {
   const rows = dna.length;
   const cols = dna[0].length;
