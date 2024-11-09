@@ -1,4 +1,5 @@
 import { prisma } from "../../config/config";
+import { Stats } from "../../types/stats";
 
 class StatsService {
   async updateStats(isMutant: boolean) {
@@ -10,47 +11,55 @@ class StatsService {
           id: "stats-id",
           count_mutant_dna: isMutant ? 1 : 0,
           count_human_dna: isMutant ? 0 : 1,
-          ratio: isMutant ? 1.0 : 0.0,
+          ratio: await this.calculateRatio(isMutant ? 1 : 0, isMutant ? 0 : 1),
         },
       });
     } else {
-      await prisma.stats.upsert({
+      const newMutantCount = stats.count_mutant_dna + (isMutant ? 1 : 0);
+      const newHumanCount = stats.count_human_dna + (isMutant ? 0 : 1);
+
+      await prisma.stats.update({
         where: { id: "stats-id" },
-        update: {
-          count_mutant_dna: isMutant ? { increment: 1 } : undefined,
-          count_human_dna: isMutant ? undefined : { increment: 1 },
-        },
-        create: {
-          id: "stats-id",
-          count_mutant_dna: isMutant ? 1 : 0,
-          count_human_dna: isMutant ? 0 : 1,
-          ratio: isMutant ? 1.0 : 0.0,
+        data: {
+          count_mutant_dna: newMutantCount,
+          count_human_dna: newHumanCount,
+          ratio: await this.calculateRatio(newMutantCount, newHumanCount),
         },
       });
     }
-
-    await this.calculateAndUpdateRatio();
   }
 
-  async calculateAndUpdateRatio() {
-    const stats = await prisma.stats.findUnique({ where: { id: "stats-id" } });
-    if (!stats) return 0;
-
-    const { count_mutant_dna, count_human_dna } = stats;
-
-    if (count_human_dna === 0) {
-      return count_mutant_dna > 0 ? 1.0 : 0.0;
-    }
-
-    return parseFloat((count_mutant_dna / count_human_dna).toFixed(2));
+  private async calculateRatio(
+    mutants: number,
+    humans: number
+  ): Promise<number> {
+    if (humans === 0) return 0;
+    return Number((mutants / humans).toFixed(2));
   }
 
-  async getStats() {
+  async getStats(): Promise<Stats> {
     const stats = await prisma.stats.findUnique({
       where: { id: "stats-id" },
     });
 
-    return stats || { count_human_dna: 0, count_mutant_dna: 0, ratio: 0.0 };
+    if (!stats) {
+      return {
+        count_mutant_dna: 0,
+        count_human_dna: 0,
+        ratio: 0,
+      };
+    }
+
+    const ratio = await this.calculateRatio(
+      stats.count_mutant_dna,
+      stats.count_human_dna
+    );
+
+    return {
+      count_mutant_dna: stats.count_mutant_dna,
+      count_human_dna: stats.count_human_dna,
+      ratio,
+    };
   }
 }
 
