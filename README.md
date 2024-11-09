@@ -17,6 +17,14 @@ To install the necessary packages, run the following command in the project root
 pnpm install
 ```
 
+## Generating Prisma Client
+
+To generate the prisma client and run the server correctly:
+
+```
+pnpm run prisma:generate
+```
+
 ## Building the Project
 
 To compile TypeScript to JavaScript, use the following command:
