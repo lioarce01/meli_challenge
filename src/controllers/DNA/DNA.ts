@@ -9,7 +9,6 @@ class DNAController {
     this.checkMutant = this.checkMutant.bind(this);
   }
 
-  // Utility method for validating DNA input
   private isValidDNA(dna: any): dna is string[] {
     return (
       Array.isArray(dna) &&
@@ -18,7 +17,6 @@ class DNAController {
     );
   }
 
-  // Error handling utility function
   private handleErrorResponse(error: any, res: Response) {
     console.error("Error in checkMutant:", error.message);
 
@@ -31,11 +29,9 @@ class DNAController {
     return res.status(500).json({ message: "Internal server error" });
   }
 
-  // Main method to check if DNA is mutant or human
   async checkMutant(req: Request, res: Response) {
     const { dna } = req.body;
 
-    // Validate the incoming DNA data
     if (!this.isValidDNA(dna)) {
       return res.status(400).json({ message: "Invalid DNA sequence" });
     }
@@ -48,7 +44,6 @@ class DNAController {
         message: result.isMutant ? "Mutant DNA detected" : "Human DNA detected",
       });
     } catch (error: any) {
-      // Centralized error handling
       return this.handleErrorResponse(error, res);
     }
   }
